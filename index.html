@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuum | Stay Eternal</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=ATo4AmGKDlPPxUfyW7Ax_AkdvvF8y7huYLM0GR9NppDwF6FSd5QfgzdzrthlzAFRn2qGjwHfTcVrQmzd&currency=USD"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #000000;
+            overflow-x: hidden;
+        }
+        .page {
+            display: none;
+            min-height: calc(100vh - 64px);
+        }
+        .active-page {
+            display: block;
+        }
+        .hero-bg {
+            background-image: url('celeb-wearing.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        /* Sticky Navigation */
+        nav {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        /* Product Card Transitions */
+        .product-card img {
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+        /* Hide scrollbars for a cleaner look if desired */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-12">
+                <a href="#" onclick="showPage('home')" class="text-2xl font-black tracking-tighter">CONTINUUM</a>
+                <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest">
+                    <a href="#" onclick="showPage('home')" class="hover:opacity-50">Home</a>
+                    <a href="#" onclick="showPage('shop')" class="hover:opacity-50">Shop</a>
+                    <a href="#" onclick="showPage('story')" class="hover:opacity-50">Story</a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-6 text-xs font-bold uppercase tracking-widest">
+                <button id="auth-btn" onclick="showPage('auth')" class="hover:opacity-50">Login</button>
+                <button onclick="showPage('checkout')" class="relative p-1 hover:opacity-50 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-black text-white text-[8px] font-black w-4 h-4 flex items-center justify-center rounded-full hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="mt-16">
+
+        <!-- Auth Page -->
+        <section id="auth" class="page relative">
+            <button onclick="closeAuth()" class="absolute top-12 right-6 md:top-24 md:right-24 hover:opacity-50 transition-opacity z-10">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div id="auth-container" class="max-w-md mx-auto px-6 py-24">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+
+        <!-- Home Page -->
+        <section id="home" class="page active-page">
+            <div class="relative h-[90vh] hero-bg flex items-center justify-center text-center text-white bg-black">
+                <!-- Fallback background overlay if image isn't found -->
+                <div class="absolute inset-0 bg-black/30"></div>
+                <div class="relative z-10 px-6">
+                    <h1 class="text-7xl md:text-9xl font-black tracking-tighter leading-none mb-8">STAY ETERNAL.</h1>
+                    <button onclick="showPage('shop')" class="bg-white text-black px-12 py-4 text-sm font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">
+                        Shop Now
+                    </button>
+                </div>
+            </div>
+            
+            <div class="max-w-7xl mx-auto px-6 py-24">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-4xl font-extrabold tracking-tight mb-6 uppercase">Uncompromising Audio.</h2>
+                        <p class="text-gray-500 leading-relaxed mb-8">Continuum delivers a precise, powerful sound experience designed for those who demand the best. Our acoustic architecture provides clear highs and deep, undistorted bass.</p>
+                        <button onclick="showPage('story')" class="text-xs font-bold uppercase underline tracking-widest decoration-2 underline-offset-4">Read our story</button>
+                    </div>
+                    <div class="aspect-square bg-gray-50 flex items-center justify-center">
+                         <img src="hero-image.jpg" alt="Continuum Buds" class="w-2/3 grayscale object-contain">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shop Page -->
+        <section id="shop" class="page">
+            <div class="max-w-7xl mx-auto px-6 py-24">
+                <h1 class="text-6xl font-black tracking-tighter mb-16 uppercase">Products.</h1>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12" id="product-grid">
+                    <!-- Product Items -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Story Page -->
+        <section id="story" class="page">
+            <div class="max-w-5xl mx-auto px-6 py-24">
+                <h1 class="text-6xl font-black tracking-tighter mb-12 uppercase text-center">The Vision.</h1>
+                
+                <!-- Video Player -->
+                <div class="aspect-video bg-black rounded-lg overflow-hidden mb-24 relative shadow-2xl">
+                    <video class="w-full h-full object-cover" controls poster="hero-image.jpg">
+                        <source src="promotional-media.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <div class="space-y-32">
+                    <div class="grid md:grid-cols-2 gap-16 items-center">
+                        <img src="hero-image.jpg" alt="Exploded View" class="w-full grayscale">
+                        <div>
+                            <h3 class="text-xs font-bold uppercase tracking-widest mb-4 text-gray-400">Engineering</h3>
+                            <h2 class="text-3xl font-extrabold tracking-tight mb-6">EXPLODED PERFORMANCE.</h2>
+                            <p class="text-gray-500">Every component of Continuum is meticulously tuned. From the custom-designed driver to the dual-chamber acoustic housing, we optimize every millimeter for pure sonic fidelity.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-16 items-center">
+                        <div class="order-2 md:order-1">
+                            <h3 class="text-xs font-bold uppercase tracking-widest mb-4 text-gray-400">Craftsmanship</h3>
+                            <h2 class="text-3xl font-extrabold tracking-tight mb-6">PHILOSOPHY & MATERIALS.</h2>
+                            <p class="text-gray-500">We believe in materials that last. High-grade titanium, surgical silicon, and sustainable composites come together to create a product that feels as premium as it sounds.</p>
+                        </div>
+                        <img src="philosophy-materials.jpg" alt="Materials" class="w-full order-1 md:order-2 grayscale">
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-16 items-center">
+                        <img src="modular-repair.jpg" alt="Repair" class="w-full grayscale">
+                        <div>
+                            <h3 class="text-xs font-bold uppercase tracking-widest mb-4 text-gray-400">Sustainability</h3>
+                            <h2 class="text-3xl font-extrabold tracking-tight mb-6">BUILT TO LAST.</h2>
+                            <p class="text-gray-500">Continuum isn't disposable. Our modular design allows for easy repairs and battery replacements, ensuring your earbuds stay in your ears and out of the landfill.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checkout Page -->
+        <section id="checkout" class="page">
+            <div class="max-w-4xl mx-auto px-6 py-24">
+                <h1 class="text-6xl font-black tracking-tighter mb-16 uppercase">Your Bag.</h1>
+                <div class="mb-12">
+                    <img src="checkout.jpg" alt="Checkout Banner" class="w-full h-48 object-cover grayscale mb-8">
+                </div>
+                <div class="grid md:grid-cols-3 gap-16">
+                    <div class="md:col-span-2 space-y-8" id="cart-items">
+                        <!-- Cart items will be injected here -->
+                        <p class="text-gray-400 py-12 text-center border-y border-gray-100">Your bag is empty.</p>
+                    </div>
+                    
+                    <div class="space-y-8">
+                        <div class="bg-gray-50 p-8">
+                            <h3 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-gray-200 pb-4">Summary</h3>
+                            <div class="space-y-4 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Subtotal</span>
+                                    <span id="subtotal">$0.00</span>
+                                </div>
+                                <div id="discount-row" class="flex justify-between text-green-600 hidden">
+                                    <span>Discount (20%)</span>
+                                    <span id="discount-amount">-$0.00</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Shipping</span>
+                                    <span>FREE</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Tax (10%)</span>
+                                    <span id="tax-amount">$0.00</span>
+                                </div>
+                                <div class="flex justify-between font-black text-lg pt-4 border-t border-gray-200">
+                                    <span>TOTAL</span>
+                                    <span id="total">$0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex space-x-2">
+                                <input type="text" id="promo-code" placeholder="PROMO CODE" class="flex-1 border border-gray-200 px-4 py-3 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-black">
+                                <button onclick="applyPromo()" class="bg-black text-white px-6 py-3 text-xs font-bold uppercase tracking-widest hover:opacity-80">Apply</button>
+                            </div>
+                            <p id="promo-message" class="text-[10px] uppercase font-bold tracking-widest"></p>
+                        </div>
+
+                        <button onclick="startCheckout()" class="w-full bg-[#0070BA] text-white py-4 font-bold flex items-center justify-center space-x-2 hover:opacity-90">
+                            <span class="italic">Checkout with</span>
+                            <span class="font-extrabold text-lg">PayPal</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 1: Details -->
+        <section id="checkout-details" class="page">
+            <div class="max-w-2xl mx-auto px-6 py-24">
+                <h1 class="text-6xl font-black tracking-tighter mb-12 uppercase">Details.</h1>
+                <div class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Full Name</label>
+                            <input type="text" id="cust-name" placeholder="JOHN DOE" class="w-full border border-gray-200 px-4 py-4 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-black">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Email Address</label>
+                            <input type="email" id="cust-email" placeholder="DEEP@CONTINUUM.COM" class="w-full border border-gray-200 px-4 py-4 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-black">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Shipping Address</label>
+                        <input type="text" id="cust-address" placeholder="123 SONIC WAY, AUDIO CITY, 90210" class="w-full border border-gray-200 px-4 py-4 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-black">
+                    </div>
+                    <button onclick="goToReview()" class="w-full bg-black text-white py-4 text-xs font-bold uppercase tracking-widest hover:opacity-80 transition-opacity">Continue to Review</button>
+                    <button onclick="showPage('checkout')" class="w-full text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors">Back to Bag</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 2 & 3: Review & Payment -->
+        <section id="checkout-review" class="page">
+            <div class="max-w-4xl mx-auto px-6 py-24">
+                <h1 class="text-6xl font-black tracking-tighter mb-12 uppercase">Review.</h1>
+                <div class="grid md:grid-cols-2 gap-16">
+                    <div class="space-y-12">
+                        <div>
+                            <h3 class="text-xs font-black uppercase tracking-[0.2em] mb-6 border-b pb-4">Shipping To</h3>
+                            <p id="review-name" class="font-bold uppercase tracking-widest text-sm mb-1"></p>
+                            <p id="review-email" class="text-gray-400 text-xs uppercase tracking-widest mb-4"></p>
+                            <p id="review-address" class="text-gray-500 text-xs leading-loose px-4 border-l-2 border-black"></p>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-black uppercase tracking-[0.2em] mb-6 border-b pb-4">Order Items</h3>
+                            <div id="review-items" class="space-y-4">
+                                <!-- Review items injected here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-12">
+                        <div class="bg-gray-50 p-8">
+                            <h3 class="text-xs font-black uppercase tracking-[0.2em] mb-6 border-b pb-4">Summary</h3>
+                            <div class="space-y-4 text-sm font-bold tracking-widest uppercase">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Total Charged</span>
+                                    <span id="review-total" class="text-xl font-black"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h3 class="text-xs font-black uppercase tracking-[0.2em] mb-6">Payment</h3>
+                            <div id="paypal-button-container" class="w-full"></div>
+                            <button onclick="simulatePayment()" class="w-full border-2 border-black py-4 text-xs font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all">Simulate Payment</button>
+                        </div>
+
+                        <button onclick="showPage('checkout-details')" class="w-full text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors">Edit Details</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Confirmation Page -->
+        <section id="confirmation" class="page">
+            <div class="max-w-7xl mx-auto px-6 py-32 flex flex-col items-center justify-center text-center">
+                <div class="w-24 h-24 bg-black text-white flex items-center justify-center rounded-full mb-12">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-8 uppercase">Order Confirmed.</h1>
+                <p class="text-xl font-bold uppercase tracking-widest mb-4">Thank you for your order, <span id="conf-name-display" class="underline decoration-2 underline-offset-4"></span>!</p>
+                <p class="text-gray-400 text-sm uppercase tracking-[0.3em] mb-16">Transaction ID: <span id="order-number" class="text-black font-black"></span></p>
+                <button onclick="showPage('home')" class="bg-black text-white px-12 py-4 text-xs font-bold uppercase tracking-widest hover:opacity-80 transition-opacity">Return to Home</button>
+            </div>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact" class="page">
+            <div class="max-w-7xl mx-auto px-6 py-24 flex flex-col items-center justify-center text-center">
+                <h1 class="text-6xl font-black tracking-tighter mb-8 uppercase">GET IN TOUCH.</h1>
+                
+                <div class="space-y-6 mb-16">
+                    <div class="space-y-2">
+                        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Direct Contact</p>
+                        <a href="mailto:support@continuumaudio.com" class="text-2xl md:text-4xl font-extrabold tracking-tight hover:opacity-50 transition-opacity">support@continuumaudio.com</a>
+                    </div>
+                    <p class="max-w-xl text-gray-500 leading-loose text-sm uppercase font-bold tracking-widest">For modular battery replacements or technical support, our team is available 24/7.</p>
+                </div>
+
+                <div class="w-full max-w-4xl">
+                     <img src="philosophy-materials.jpg" alt="Philosophy" class="w-full grayscale shadow-2xl">
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 mb-24">
+                <div class="col-span-2 md:col-span-1">
+                    <h4 class="text-2xl font-black tracking-tighter mb-6">CONTINUUM</h4>
+                    <p class="text-xs text-gray-400 leading-loose">© 2026 CONTINUUM AUDIO. ALL RIGHTS RESERVED. DESIGNED FOR THE ETERNAL.</p>
+                </div>
+                <div>
+                    <h5 class="text-[10px] font-black uppercase tracking-[0.2em] mb-6">Products</h5>
+                    <ul class="space-y-3 text-xs font-bold text-gray-500 uppercase tracking-widest">
+                        <li><a href="#" onclick="showPage('shop')" class="hover:text-black">Earbuds</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-[10px] font-black uppercase tracking-[0.2em] mb-6">Company</h5>
+                    <ul class="space-y-3 text-xs font-bold text-gray-500 uppercase tracking-widest">
+                        <li><a href="#" onclick="showPage('story')" class="hover:text-black">Philosophy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-[10px] font-black uppercase tracking-[0.2em] mb-6">Support</h5>
+                    <ul class="space-y-3 text-xs font-bold text-gray-500 uppercase tracking-widest">
+                        <li><a href="#" onclick="showPage('contact')" class="hover:text-black">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from 'firebase/app';
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as firebaseSignOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+
+        // Firebase configuration will be loaded from the provisioned config file
+        let auth = null;
+        let db = null;
+        let firebaseReady = false;
+
+        const firebaseConfig = {
+            projectId: "gen-lang-client-0090640614",
+            appId: "1:671927668754:web:e1d960f90f3575295c48cb",
+            apiKey: "AIzaSyB1RW5gbUvCk4r-ysO2biWAlIgerzF6fg0",
+            authDomain: "gen-lang-client-0090640614.firebaseapp.com",
+            firestoreDatabaseId: "ai-studio-ca05894a-e442-40c9-a281-18800c82ff7c",
+            storageBucket: "gen-lang-client-0090640614.firebasestorage.app",
+            messagingSenderId: "671927668754"
+        };
+
+        async function initFirebase() {
+            try {
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // Setup observer once auth is ready
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    isLoggedIn = !!user;
+                    const authBtn = document.getElementById('auth-btn');
+                    if (authBtn) {
+                        authBtn.innerText = user ? 'Account' : 'Login';
+                    }
+                    updateAuthUI();
+                });
+                
+                firebaseReady = true;
+            } catch (error) {
+                console.warn("Firebase initialization skipped:", error.message);
+            }
+        }
+
+        // Initialize Firebase
+        initFirebase();
+
+        function checkFirebase() {
+            if (!firebaseReady || !auth) {
+                alert("Please click 'Accept' in the Firebase Setup UI to enable login and database services.");
+                return false;
+            }
+            return true;
+        }
+
+        /* Store Data */
+        const products = [
+            { 
+                id: 1, 
+                name: 'Lab Edition', 
+                price: 299, 
+                image: 'lab-edition.jpg', 
+                desc: 'The raw, industrial look of an engineering sample. Hand-brushed titanium.',
+                features: ["Real industrial titanium finish.", "Designed to show the beauty of raw metal.", "Parts can be swapped easily if they wear out.", "Sound tuned exactly as the artist heard it."]
+            },
+            { 
+                id: 2, 
+                name: 'Alloy Pro', 
+                price: 349, 
+                image: 'alloy.jpg', 
+                desc: 'Aerospace-grade durability with a refined metallic sheen. Built for the grind.',
+                features: ["Tough enough for daily commutes and travel.", "Battery lasts for a full work week (40 hours).", "Silence the world around you with smart noise-blocking.", "Extra-durable parts built to take a beating."]
+            },
+            { 
+                id: 3, 
+                name: 'Phantom Black', 
+                price: 279, 
+                image: 'phantom.jpg', 
+                desc: 'Deep matte finish that absorbs light. Stealth audio for the shadows.',
+                features: ["Sleek matte finish that doesn't show fingerprints.", "Fast, stable connection to your phone.", "Safe for workouts, rain, and sweat.", "Extra 'oomph' in the bass for high-energy music."]
+            },
+            { 
+                id: 4, 
+                name: 'Eco Core', 
+                price: 249, 
+                image: 'eco-core.jpg', 
+                desc: 'Sustainably sourced titanium components with a focus on maximum repairability.',
+                features: ["Made from recycled premium metals.", "You can fix these yourself with zero glue used inside.", "Designed to never end up in a landfill.", "Uses less power for a longer-lasting life."]
+            },
+            { 
+                id: 5, 
+                name: 'Stealth', 
+                price: 229, 
+                image: 'stealth.jpg', 
+                desc: 'A ultra-lightweight frame with a dark sandblasted texture. Performance in silence.',
+                features: ["Gritty, textured finish for a secure grip.", "So light you'll forget you're wearing them.", "Studio-quality sound without the wires.", "Control your music with simple taps on the side."]
+            },
+            { 
+                id: 6, 
+                name: 'Origin', 
+                price: 199, 
+                image: 'origin.jpg', 
+                desc: 'The classic Continuum look. Pure polished titanium that celebrates the brand\'s roots.',
+                features: ["Shiny, polished look that stands out.", "The classic, balanced sound we’re known for.", "Easily repairable internals for a lifetime of use.", "Includes a premium case to keep them safe."]
+            },
+            { 
+                id: 7, 
+                name: 'Champagne Gold', 
+                price: 399, 
+                image: 'champagne-gold.jpg', 
+                desc: 'A luxury finish that pairs studio-grade sound with an elegant, warm aesthetic.',
+                features: ["Elegant gold finish for a sophisticated look.", "High-end internal parts for the clearest sound possible.", "Crystal clear audio that catches every detail.", "Works with high-resolution music for true fans."]
+            }
+        ];
+
+        let cart = []; // Array of { product, quantity }
+        let currentPrice = 0;
+        let currentProduct = null;
+        let discountApplied = false;
+        let isLoggedIn = false;
+        let currentUser = null;
+        let previousPage = 'home';
+        let currentPage = 'home';
+        let isSignUpMode = false;
+
+        const OperationType = {
+            CREATE: 'create',
+            UPDATE: 'update',
+            DELETE: 'delete',
+            LIST: 'list',
+            GET: 'get',
+            WRITE: 'write',
+        };
+
+        function handleFirestoreError(error, operationType, path) {
+            const errInfo = {
+                error: error instanceof Error ? error.message : String(error),
+                authInfo: {
+                    userId: auth.currentUser?.uid,
+                    email: auth.currentUser?.email,
+                    emailVerified: auth.currentUser?.emailVerified,
+                    isAnonymous: auth.currentUser?.isAnonymous,
+                },
+                operationType,
+                path
+            }
+            console.error('Firestore Error: ', JSON.stringify(errInfo));
+            // In a production app, we might show a nice message to the user
+            throw new Error(JSON.stringify(errInfo));
+        }
+
+        // Navigation Function
+        function showPage(pageId) {
+            if (pageId !== 'auth') {
+                previousPage = currentPage;
+                currentPage = pageId;
+            } else {
+                updateAuthUI();
+            }
+
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            // Show requested page
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.add('active-page');
+            }
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function closeAuth() {
+            showPage(previousPage || 'home');
+        }
+
+        function updateAuthUI() {
+            const container = document.getElementById('auth-container');
+            if (isLoggedIn) {
+                container.innerHTML = `
+                    <div class="text-center space-y-8">
+                        <h2 class="text-4xl font-black tracking-tighter uppercase text-center">Your Account.</h2>
+                        <p class="text-xs font-bold uppercase tracking-widest text-black">Welcome, ${currentUser?.displayName || 'Member'}</p>
+                        <p class="text-gray-400 text-[10px] uppercase tracking-widest leading-loose">You are currently logged in as a Continuum member. You have access to exclusive engineering drops and priority support.</p>
+                        <div class="pt-8 border-t border-gray-100">
+                             <button onclick="signOut()" class="w-full bg-black text-white py-4 text-xs font-bold uppercase tracking-widest hover:opacity-80 transition-opacity">Sign Out</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <h2 class="text-4xl font-black tracking-tighter mb-8 uppercase">${isSignUpMode ? 'Register.' : 'Membership.'}</h2>
+                    <div class="space-y-8">
+                        <div class="space-y-4">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Email</label>
+                                <input type="email" id="login-email" placeholder="EMAIL ADDRESS" class="w-full border border-gray-200 px-4 py-4 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-black">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-gray-400">Password</label>
+                                <input type="password" id="login-pass" placeholder="PASSWORD" class="w-full border border-gray-200 px-4 py-4 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-black">
+                            </div>
+                            <button onclick="${isSignUpMode ? 'handleSignUp()' : 'handleSignIn()'}" class="w-full bg-black text-white py-4 text-xs font-bold uppercase tracking-widest hover:opacity-80 transition-opacity">
+                                ${isSignUpMode ? 'Sign Up' : 'Sign In'}
+                            </button>
+                        </div>
+
+                        <div class="text-center">
+                            <button onclick="toggleAuthMode()" class="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors">
+                                ${isSignUpMode ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
+                            </button>
+                        </div>
+
+                        <div class="text-center py-4">
+                            <span class="px-4 bg-white relative z-10 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Or</span>
+                            <div class="h-px bg-gray-100 -mt-2"></div>
+                        </div>
+
+                        <button onclick="signInWithGoogle()" class="w-full border border-gray-200 py-4 flex items-center justify-center space-x-3 hover:bg-gray-50 transition-colors">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.1-1.94 3.31-4.79 3.31-8.09z"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path><path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path></svg>
+                            <span class="text-xs font-bold uppercase tracking-widest">Sign in with Google</span>
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Shop Grid Initialization
+        function initShop() {
+            const grid = document.getElementById('product-grid');
+            if (grid) {
+                grid.innerHTML = products.map(product => `
+                    <div class="product-card">
+                        <div class="aspect-square bg-gray-50 flex items-center justify-center mb-6 overflow-hidden group">
+                            <img src="${product.image}" alt="${product.name}" class="w-3/4 grayscale object-contain">
+                        </div>
+                        <div class="flex flex-col space-y-4">
+                            <div>
+                                <h2 class="text-xl font-black tracking-tighter uppercase">${product.name}</h2>
+                                <p class="text-[11px] font-medium text-zinc-500 leading-tight mb-4">${product.desc}</p>
+                                
+                                <ul class="space-y-1 mb-4">
+                                    ${product.features.map(f => `
+                                        <li class="text-[9px] font-bold uppercase tracking-widest text-gray-400 flex items-center">
+                                            <span class="w-1 h-1 bg-gray-300 rounded-full mr-2"></span>
+                                            ${f}
+                                        </li>
+                                    `).join('')}
+                                </ul>
+
+                                <p class="text-sm font-bold">$${product.price}</p>
+                            </div>
+                            <button onclick="addToBag(${product.id})" class="text-xs font-bold uppercase underline tracking-widest hover:opacity-50 transition-opacity decoration-2 underline-offset-4 self-start">Add to bag</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Cart Logic
+        function addToBag(productId) {
+            const product = products.find(p => p.id === productId);
+            const cartItem = cart.find(item => item.product.id === productId);
+            
+            // Update dynamic pricing as requested
+            currentPrice = product.price;
+            currentProduct = product;
+            
+            if (cartItem) {
+                cartItem.quantity += 1;
+            } else {
+                cart.push({ product, quantity: 1 });
+            }
+            
+            updateCartUI();
+            
+            // Visual feedback
+            const cartBtn = document.querySelector('button[onclick*="checkout"]');
+            if (cartBtn) {
+                cartBtn.classList.add('scale-110');
+                setTimeout(() => cartBtn.classList.remove('scale-110'), 200);
+            }
+        }
+
+        function updateQuantity(productId, delta) {
+            const index = cart.findIndex(item => item.product.id === productId);
+            if (index !== -1) {
+                cart[index].quantity += delta;
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            // Update counts
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const countEl = document.getElementById('cart-count');
+            if (countEl) {
+                countEl.innerText = totalItems;
+                countEl.classList.toggle('hidden', totalItems === 0);
+            }
+
+            // Render items
+            const container = document.getElementById('cart-items');
+            if (container) {
+                if (cart.length === 0) {
+                    container.innerHTML = '<p class="text-gray-400 py-12 text-center border-y border-gray-100">Your bag is empty.</p>';
+                } else {
+                    container.innerHTML = cart.map((item) => `
+                        <div class="flex items-center space-x-6 py-6 border-b border-gray-50">
+                            <div class="w-24 h-24 bg-gray-50 flex items-center justify-center p-4">
+                                <img src="${item.product.image}" alt="${item.product.name}" class="w-full grayscale object-contain">
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-black tracking-tighter uppercase">${item.product.name}</h3>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">$${item.product.price}</p>
+                            </div>
+                            <div class="flex items-center space-x-4 border border-gray-100 px-3 py-1">
+                                <button onclick="updateQuantity(${item.product.id}, -1)" class="text-xl font-bold hover:opacity-50 transition-opacity">－</button>
+                                <span class="text-sm font-black w-4 text-center">${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.product.id}, 1)" class="text-xl font-bold hover:opacity-50 transition-opacity">＋</button>
+                            </div>
+                            <button onclick="updateQuantity(${item.product.id}, -${item.quantity})" class="text-[10px] font-bold uppercase tracking-widest text-gray-300 hover:text-black">Remove</button>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+            let discount = 0;
+
+            const discRow = document.getElementById('discount-row');
+            const discAmt = document.getElementById('discount-amount');
+            if (discountApplied) {
+                discount = subtotal * 0.2;
+                if (discRow) discRow.classList.remove('hidden');
+                if (discAmt) discAmt.innerText = `-$${discount.toFixed(2)}`;
+            } else {
+                if (discRow) discRow.classList.add('hidden');
+            }
+
+            const tax = (subtotal - discount) * 0.1;
+            const total = (subtotal - discount) + tax;
+
+            if (document.getElementById('subtotal')) document.getElementById('subtotal').innerText = `$${subtotal.toFixed(2)}`;
+            if (document.getElementById('tax-amount')) document.getElementById('tax-amount').innerText = `$${tax.toFixed(2)}`;
+            if (document.getElementById('total')) document.getElementById('total').innerText = `$${total.toFixed(2)}`;
+        }
+
+        function applyPromo() {
+            const codeInput = document.getElementById('promo-code');
+            if (!codeInput) return;
+            const code = codeInput.value.toUpperCase();
+            const msg = document.getElementById('promo-message');
+            
+            if (code === 'PRO20') {
+                discountApplied = true;
+                if (msg) {
+                    msg.innerText = 'Code applied: 20% off';
+                    msg.classList.remove('text-red-500');
+                    msg.classList.add('text-green-600');
+                }
+                calculateTotal();
+            } else {
+                if (msg) {
+                    msg.innerText = 'Invalid code';
+                    msg.classList.add('text-red-500');
+                    msg.classList.remove('text-green-600');
+                }
+            }
+        }
+
+        // Checkout Flow Logic
+        let userData = {
+            name: '',
+            email: '',
+            address: ''
+        };
+
+        function startCheckout() {
+            if (cart.length === 0) {
+                alert('Your bag is empty.');
+                return;
+            }
+            if (!isLoggedIn) {
+                showPage('auth');
+                return;
+            }
+            showPage('checkout-details');
+        }
+
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            updateAuthUI();
+        }
+
+        async function handleSignIn() {
+            if (!checkFirebase()) return;
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            if (!email || !pass) return;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                // Observer handles the rest
+                showPage('shop');
+            } catch (error) {
+                alert("Sign in failed: " + error.message);
+            }
+        }
+
+        async function handleSignUp() {
+            if (!checkFirebase()) return;
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            if (!email || !pass) return;
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                // Observer handles the rest
+                showPage('shop');
+            } catch (error) {
+                alert("Sign up failed: " + error.message);
+            }
+        }
+
+        async function signInWithGoogle() {
+            if (!checkFirebase()) return;
+            
+            const provider = new GoogleAuthProvider();
+            
+            // Ensure account selector appears
+            provider.setCustomParameters({ 
+                prompt: 'select_account'
+            });
+
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    console.log("Login successful", result.user.email);
+                    // Observer handles UI updates
+                    showPage('shop');
+                })
+                .catch((error) => {
+                    console.error("Login failed:", error);
+                    // Detailed error message for the user
+                    if (error.code === 'auth/unauthorized-domain') {
+                        alert("Login failed: This domain is not authorized. Please ensure you are using the correct Firebase project.");
+                    } else {
+                        alert("Login failed [" + error.code + "]: " + error.message);
+                    }
+                });
+        }
+
+        async function signOut() {
+            if (!checkFirebase()) return;
+            try {
+                await firebaseSignOut(auth);
+                // Observer handles the rest
+                showPage('home');
+            } catch (error) {
+                console.error("Sign out failed:", error);
+            }
+        }
+
+        function goToReview() {
+            userData.name = document.getElementById('cust-name').value;
+            userData.email = document.getElementById('cust-email').value;
+            userData.address = document.getElementById('cust-address').value;
+
+            if (!userData.name || !userData.email || !userData.address) {
+                alert('Please complete all fields.');
+                return;
+            }
+
+            // Populate Review Page
+            if (document.getElementById('review-name')) document.getElementById('review-name').innerText = userData.name;
+            if (document.getElementById('review-email')) document.getElementById('review-email').innerText = userData.email;
+            if (document.getElementById('review-address')) document.getElementById('review-address').innerText = userData.address;
+
+            const reviewItemsContainer = document.getElementById('review-items');
+            if (reviewItemsContainer) {
+                reviewItemsContainer.innerHTML = cart.map(item => `
+                    <div class="flex items-center space-x-4">
+                        <img src="${item.product.image}" class="w-12 h-12 grayscale object-contain bg-gray-50 p-2">
+                        <div class="flex-1">
+                            <p class="text-xs font-black uppercase tracking-tighter">${item.product.name}</p>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Qty: ${item.quantity} | $${item.product.price * item.quantity}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if (document.getElementById('review-total')) document.getElementById('review-total').innerText = document.getElementById('total').innerText;
+            
+            initPayPalButton();
+            showPage('checkout-review');
+        }
+
+        function initPayPalButton() {
+            const container = document.getElementById('paypal-button-container');
+            if (!container) return;
+            
+            // Clear previous buttons if any
+            container.innerHTML = '';
+            
+            if (!currentProduct) {
+                container.innerHTML = '<p class="text-[10px] uppercase font-bold text-gray-400 py-4 text-center">Please select a product first.</p>';
+                return;
+            }
+
+            // Using the total from the summary
+            const totalStr = document.getElementById('total').innerText.replace('$', '');
+            const totalValue = parseFloat(totalStr) || currentPrice;
+
+            if (window.paypal) {
+                window.paypal.Buttons({
+                    style: {
+                        shape: 'rect',
+                        color: 'black',
+                        layout: 'vertical',
+                        label: 'paypal',
+                    },
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: totalValue.toFixed(2),
+                                    breakdown: {
+                                        item_total: {
+                                            currency_code: 'USD',
+                                            value: totalValue.toFixed(2)
+                                        }
+                                    }
+                                },
+                                items: [{
+                                    name: currentProduct.name,
+                                    unit_amount: {
+                                        currency_code: 'USD',
+                                        value: totalValue.toFixed(2)
+                                    },
+                                    quantity: '1'
+                                }]
+                            }]
+                        });
+                    },
+                    onApprove: async function(data, actions) {
+                        const details = await actions.order.capture();
+                        handleOrderSuccess(details.id, 'PayPal');
+                    }
+                }).render('#paypal-button-container');
+            }
+        }
+
+        async function handleOrderSuccess(transactionId, method) {
+            const orderId = transactionId || ('CTM-' + Math.floor(1000 + Math.random() * 9000));
+            
+            // Save to Firestore - Orders Collection
+            let orderData = {
+                userId: currentUser.uid,
+                items: cart.map(item => ({
+                    id: item.product.id,
+                    name: item.product.name,
+                    quantity: item.quantity,
+                    price: item.product.price
+                })),
+                total: parseFloat(document.getElementById('total').innerText.replace('$', '')) || currentPrice,
+                shippingAddress: userData.address,
+                email: userData.email,
+                paymentMethod: method,
+                transactionId: orderId,
+                createdAt: serverTimestamp()
+            };
+
+            if (db && currentUser) {
+                try {
+                    // Update global orders
+                    await addDoc(collection(db, 'orders'), orderData);
+                    
+                    // Update user's profile with detailed purchase info as requested
+                    await addDoc(collection(db, 'users', currentUser.uid, 'purchases'), {
+                        productName: currentProduct?.name || 'Continuum Product',
+                        price: currentPrice,
+                        transactionId: orderId,
+                        purchasedAt: serverTimestamp()
+                    });
+                } catch (error) {
+                    handleFirestoreError(error, OperationType.WRITE, 'orders/users');
+                }
+            }
+
+            if (document.getElementById('conf-name-display')) document.getElementById('conf-name-display').innerText = userData.name.split(' ')[0] || 'Member';
+            if (document.getElementById('order-number')) document.getElementById('order-number').innerText = orderId;
+            
+            // Clear Cart and State
+            cart = [];
+            currentProduct = null;
+            currentPrice = 0;
+            updateCartUI();
+            showPage('confirmation');
+        }
+
+        async function simulatePayment() {
+            handleOrderSuccess(null, 'Simulated');
+        }
+
+        // Initialize Shop Grid on load
+        window.onload = () => {
+            initShop();
+            updateAuthUI();
+        };
+
+        // Expose functions to window because of module scope
+        Object.assign(window, {
+            showPage,
+            closeAuth,
+            updateAuthUI,
+            initShop,
+            addToBag,
+            updateQuantity,
+            updateCartUI,
+            calculateTotal,
+            applyPromo,
+            startCheckout,
+            handleSignIn,
+            handleSignUp,
+            toggleAuthMode,
+            signInWithGoogle,
+            signOut,
+            goToReview,
+            simulatePayment
+        });
+
+    </script>
+</body>
+</html>
